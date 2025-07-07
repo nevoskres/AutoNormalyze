@@ -12,7 +12,7 @@ class App:
         self.root = root
         self.root.title("AutoNormalyze")
         self.root.geometry("600x500")
-        self.root.configure(bg="DarkOliveGreen3")
+        self.root.configure(bg="#F6F6EB")
 
         self.datasets = []
         self.current_index = None
@@ -28,19 +28,19 @@ class App:
         self.dark_mode = not self.dark_mode
         if self.dark_mode:
             self.night_setup_styles()
-            self.root.configure(bg="black")
+            self.root.configure(bg="#20242B")
         else:
             self.day_setup_styles()
-            self.root.configure(bg="DarkOliveGreen3")
+            self.root.configure(bg="#F6F6EB")
         self.show_main_menu()
 
     # Общий ночной стиль
     def night_setup_styles(self):
         self.style = {
             "bg": "black",
-            "fg": "red",
+            "fg": "white",
             "font": ("Arial", 12),
-            "activebackground": "#333333",
+            "activebackground": "#414650",
             "activeforeground": "white"
         }
 
@@ -55,16 +55,16 @@ class App:
     # Дневной стиль
     def day_setup_styles(self):
         self.style = {
-            "bg": "DarkOliveGreen3",
+            "bg": "#F6F6EB",
             "fg": "black",
             "font": ("Arial", 12),
-            "activebackground": "DarkOliveGreen4",
+            "activebackground": "#F6F6EE",
             "activeforeground": "black"
         }
         self.text_style = {
             "font": ("Consolas", 11),
             "fg": "black",
-            "bg": "DarkOliveGreen3",
+            "bg": "#F6F6EB",
             "insertbackground": "black",
             "selectbackground": "aquamarine4"
         }
@@ -84,6 +84,7 @@ class App:
         buttons = [
             ("Открыть файл", self.load_file),
             ("Ручной ввод", self.show_input_window),
+            ("Выбрать из существующих", self.show_dataset_selector),
             ("Помощь", self.show_help),
             ("Ночной/Дневной режим",self.toggle_theme),
             ("Выход", self.root.quit)
@@ -195,7 +196,7 @@ class App:
         fig, axs = plt.subplots(1, 2, figsize=(12, 5))
 
         # Гистограмма
-        axs[0].hist(data, bins=20, color='red', alpha=0.7)
+        axs[0].hist(data, bins=8, color='red', alpha=0.7)
         axs[0].set_title(f"Гистограмма выборки #{self.current_index + 1}")
         axs[0].set_xlabel("Значения")
         axs[0].set_ylabel("Частота")
