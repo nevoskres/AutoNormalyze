@@ -1,6 +1,7 @@
 import re
 import numpy as np
 import matplotlib.pyplot as plt
+from scipy.spatial.distance import canberra
 from sklearn.preprocessing import MinMaxScaler, StandardScaler, RobustScaler, PowerTransformer
 from scipy.stats import skew, normaltest
 from tkinter import *
@@ -13,8 +14,9 @@ class App:
         self.root = root
         self.root.title("AutoNormalyze")
         self.root.geometry("600x500")
+        root.minsize(600, 250)
+        root.maxsize(600, 1000)
         self.root.configure(bg="#F6F6EB")
-
         self.csv_df = None
         self.datasets = []
         self.current_index = None
@@ -96,7 +98,8 @@ class App:
             Button(self.root, text=text, command=command, **self.style).pack(pady=5, fill=X, padx=50)
 
     # Извлечение чисел из текста
-    def extract_numbers(self, text):
+    @staticmethod
+    def extract_numbers(text):
         numrex = re.compile(r'[-+]?\d+\.?\d*')
         matches = numrex.findall(text)
         return np.array([float(m) for m in matches], dtype=np.float64)
@@ -218,10 +221,21 @@ class App:
         self.clear_window()
         Label(self.root, text="Выберите выборку:", **self.style).pack(pady=10)
 
+        # для скроллбара нужно отдельное поле
+        canvas = Canvas(root)
+        sb = Scrollbar(canvas, orient="vertical", command=canvas.yview)
+        scrollable_frame = Frame(canvas)
+        scrollable_frame.bind('<Configure>', lambda e: canvas.configure(scrollregion=canvas.bbox("all")))
+        canvas.create_window((0, 0), window=scrollable_frame, anchor="nw")
+        canvas.configure(yscrollcommand=sb.set)
+
+        canvas.pack(anchor="center", fill="both", expand=True)
+        sb.pack(side="right", fill="y")
+
         for i, dataset in enumerate(self.datasets):
-            Button(self.root, text=f"Выборка #{i + 1} ({len(dataset)} чисел)",
+            Button(scrollable_frame, text=f"Выборка #{i + 1} ({len(dataset)} чисел)",
                    command=lambda i=i: self.select_dataset(i),
-                   **self.style).pack(pady=5, fill=X, padx=50)
+                   **self.style).pack(pady=5, fill="both", padx=210)
 
         Button(self.root, text="Назад", command=self.show_main_menu, **self.style).pack(pady=10)
 
