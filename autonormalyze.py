@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 from sklearn.preprocessing import MinMaxScaler, StandardScaler, RobustScaler, PowerTransformer
 from scipy.stats import skew, normaltest
 from tkinter import *
-from tkinter import filedialog, messagebox, scrolledtext
+from tkinter import filedialog, messagebox, scrolledtext, Listbox
 import pandas as pd
 
 
@@ -220,21 +220,26 @@ class App:
         self.clear_window()
         Label(self.root, text="Выберите выборку:", **self.style).pack(pady=10)
 
-        # для скроллбара нужно отдельное поле
-        canvas = Canvas(root)
-        sb = Scrollbar(canvas, orient="vertical", command=canvas.yview)
-        scrollable_frame = Frame(canvas)
-        scrollable_frame.bind('<Configure>', lambda e: canvas.configure(scrollregion=canvas.bbox("all")))
-        canvas.create_window((0, 0), window=scrollable_frame, anchor="nw")
-        canvas.configure(yscrollcommand=sb.set)
+        scrollbar = Scrollbar(self.root)
+        listbox = Listbox(
+            self.root,
+            yscrollcommand=scrollbar.set,
+            font=self.style.get("font"),
+            bg=self.style.get("bg"),
+            fg=self.style.get("fg"),
+            selectbackground="lightblue",
+            height=25
+        )
 
-        canvas.pack(anchor="center", fill="both", expand=True)
-        sb.pack(side="right", fill="y")
+        scrollbar.config(command=listbox.yview)
 
         for i, dataset in enumerate(self.datasets):
-            Button(scrollable_frame, text=f"Выборка #{i + 1} ({len(dataset)} чисел)",
-                   command=lambda i=i: self.select_dataset(i),
-                   **self.style).pack(pady=5, fill="both", padx=210)
+            listbox.insert("end", f"Выборка #{i + 1} ({len(dataset)} чисел)")
+
+        listbox.bind("<<ListboxSelect>>", lambda e: self.select_dataset(listbox.curselection()[0]))
+
+        listbox.pack(side="left", fill="both", expand=True)
+        scrollbar.pack(side="right", fill="y")
 
         Button(self.root, text="Назад", command=self.show_main_menu, **self.style).pack(pady=10)
 
@@ -271,7 +276,7 @@ class App:
 """
         messagebox.showinfo("Статистика", stats)
 
-    # Визуализация гистограммы
+    # Визуализация графиков
     def plot_data(self):
         data = self.datasets[self.current_index]
 
