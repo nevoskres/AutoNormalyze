@@ -336,7 +336,8 @@ class App:
             messagebox.showerror("Ошибка", f"Ошибка авто-нормализации:\n{str(e)}")
 
     # Помощь
-    def show_help(self):
+    @staticmethod
+    def show_help():
         help_text = """
 Инструкция по использованию:
 
