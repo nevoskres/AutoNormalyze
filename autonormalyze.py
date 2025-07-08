@@ -1,7 +1,6 @@
 import re
 import numpy as np
 import matplotlib.pyplot as plt
-from scipy.spatial.distance import canberra
 from sklearn.preprocessing import MinMaxScaler, StandardScaler, RobustScaler, PowerTransformer
 from scipy.stats import skew, normaltest
 from tkinter import *
