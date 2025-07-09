@@ -293,7 +293,7 @@ class App:
         fig, axs = plt.subplots(1, 2, figsize=(12, 5))
 
         # Гистограмма
-        axs[0].hist(data, bins=8, color=hist_color, alpha=0.7)
+        axs[0].hist(data, bins='rice', rwidth = 0.9, color=hist_color, alpha=0.7)
         axs[0].set_title(f"Гистограмма выборки #{self.current_index + 1}")
         axs[0].set_xlabel("Значения")
         axs[0].set_ylabel("Частота")
@@ -334,7 +334,7 @@ class App:
                     method_used = "Box-Cox (асимметрия, положительные данные)"
                 else:
                     self.scaler = PowerTransformer(method='yeo-johnson')
-                    method_used = "Yeo-Johnson (асимметрия, отрицательные значения)"
+                    method_used = "Yeo-Johnson (асимметрия, неположительные значения)"
             elif p > 0.05:
                 # Нормальное распределение — StandardScaler (Z-преобразование)
                 self.scaler = StandardScaler()
