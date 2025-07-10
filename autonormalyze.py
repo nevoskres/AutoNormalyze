@@ -293,7 +293,7 @@ class App:
         fig, axs = plt.subplots(1, 2, figsize=(12, 5))
 
         # Гистограмма
-        axs[0].hist(data, bins='rice', rwidth = 0.9, color=hist_color, alpha=0.7)
+        axs[0].hist(data, bins='auto', ec='black', color=hist_color, alpha=0.7)
         axs[0].set_title(f"Гистограмма выборки #{self.current_index + 1}")
         axs[0].set_xlabel("Значения")
         axs[0].set_ylabel("Частота")
